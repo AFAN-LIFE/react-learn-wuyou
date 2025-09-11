@@ -517,3 +517,6 @@ function handleActive (status) {
   );
 }
 ```
+
+## 同级组件传值
+需要通过父组件的中转，此时用props就很麻烦，可以使用context

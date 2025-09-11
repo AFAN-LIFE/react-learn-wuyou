@@ -23,9 +23,8 @@ function Detail ({ onActive }) {
 
 export default function App() {
   // 组件通信
-  // 4 将子组件传递给父组件
-  // 注意：父组件传递给子组件的props都是单向（只读的），不要尝试修改
-  // 先让父组件给子组件一个函数，然后子组件设置一个事件触发，从而将结果通过函数传递给父组件
+  // 5 将同级组件传值
+  // 同级组件传递需要通过父组件的中转，此时用props就很麻烦，React提供了Hooks
 
 function handleActive (status) {
   console.log('父组件收到', status)
