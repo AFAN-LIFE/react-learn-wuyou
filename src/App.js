@@ -1,89 +1,39 @@
 import logo from './logo.svg';
-import {useState} from 'react';
-import './App.css';
 
 function App() {
-  //  不做状态修改，点击了按钮内容也不更新渲染
-  let divContent = '默认内容'
+  // 组件通信
+  // 1 DOM 组件是 React支持的所有HTML和SVG标签，在React称作Props，React使用Props和HTML还是不一样的
+  // 1.1 jsx语法可能和js的关键字class重复，所以DOM组件这里叫做className，显示还是class
+  // 1.2 用对象字面量imgStyleObj来设置style更加清晰
+  // 1.3 设置imgData能把所有的属性给提取出来
 
-  // 方法1：普通状态
-  // 一个用来读，一个用来改            设置初始值
-  // 刚开始写的时候很复杂，如果每个变量默认都支持状态更新机制，页面负担很大
-  // 因为每个组件一般只有2-3个状态，而不是每个变量都是状态
-  const [content, setContent] = useState('标签的默认内容')
-
-  // 方法2：对象形式的状态
-  // 这里想对2个变量做统一处理，用对象更加合适
-  const [data, setData] = useState({
-    title : '默认标题',
-    content : '默认内容'
-  })
-
-  // 方法3：数组形式的状态
-  const [list, setList] = useState([
-    {'id': 1, 'name': '小明'}, 
-    {'id': 2, 'name': '小华'}, 
-    {'id': 3, 'name': '小李'}
-  ])
-  const listData = list.map(item => (
-    <li key={item.id}> {item.name} </li>
-  ))
-
-
-  function handleSimpleClick (e) {
-    // 可以用e来接受事件的相关信息
-    console.log('点击了按钮', e)
-    // 这里点击了页面的内容也没有更新 Vue可以声明响应式数据
-    // react没有这种机制，需要使用useState
-    // divContent = '新内容'
-    setContent('新内容')
-  }
-
-  function handleObjectClick (e) {
-    // 这步会直接换，所以要写全
-    setData({
-      // content: '默认内容'
-      ...data,  // 如果属性太多，可以用展开运算符，最后的属性会覆盖之前的同名属性
-      title: '新标题', 
-    })
-  }
-
-  function handleObjectClick (e) {
-    // 这步会直接换，所以要写全
-    setData({
-      // content: '默认内容'
-      ...data,  // 如果属性太多，可以用展开运算符，最后的属性会覆盖之前的同名属性
-      title: '新标题', 
-    })
-  }
-
-
-  let id = 3
-  function handleListClick (e) {
-    // 赋值
-    // setList([
-    //   ...list,
-    //   {id: ++id, name:'小花猫'}
-    // ])
-
-    // 也可以过滤
-    setList(list.filter(item => item.id !== 2))
+  const imgStyleObj = {
+          width: 100, // 默认px，加单位要写 '100wh'
+          height: 100,
+          backgroudColor: 'grey',
+        }
+  
+  // alt不能提出来
+  const imgData = {
+      className: "small",
+      style: {
+          width: 100, // 默认px，加单位要写 '100wh'
+          height: 100,
+          backgroudColor: 'grey',
+        }
   }
 
   return (
-    <>
-      {/* <div>{divContent}</div> */}
+    <div> 
+      <img 
+        src={logo} 
+        alt=""
+        // style={imgStyleObj}
 
-      {/* <div>{content}</div> */}
-      {/* <button onClick={handleSimpleClick}> 普通状态按钮 </button> */}
-
-      {/* <div title={data.title}>{data.content}</div> */}
-      {/* <button onClick={handleObjectClick}> 对象状态按钮 </button> */}
-    
-      <ul> {listData}</ul>
-      <button onClick={handleListClick}> 数组状态按钮 </button>
-    
-    </>
+        // 并不是ES6的展开运算符，是当前对象的键值直接放到这个位置，不能在没有容器的地方单独使用
+        {...imgData}
+      />
+    </div>
   );
 }
 
