@@ -1,40 +1,85 @@
-import logo from './logo.svg';
+// 用一个props写
+// function Article (props) {
+//   return (
+//     <div>
+//         <h2> {props.title} </h2>
+//         <p> {props.content} </p>
+//     </div>
+//   )
+// }
 
-function App() {
+// 也可以输入的时候就展开
+// function Article ({title, content, active}) {
+//   return (
+//     <div>
+//         <h2> {title} </h2>
+//         <p> {content} </p>
+//         <p> 状态：{active ? '显示' : '隐藏'} </p>
+//     </div>
+//   )
+// }
+
+// 还可以继续分层
+// 更多细节不需要在Article做
+function Detail ({content, active}) {
+  return (
+    <>
+      <p> {content} </p>
+      <p> 状态：{active ? '显示' : '隐藏'} </p>
+    </>
+  )
+}
+
+function Article ({title, detailData}) {
+  return (
+    <div>
+        <h2> {title} </h2>
+        <Detail {...detailData}/>
+    </div>
+  )
+}
+
+export default function App() {
   // 组件通信
-  // 1 DOM 组件是 React支持的所有HTML和SVG标签，在React称作Props，React使用Props和HTML还是不一样的
-  // 1.1 jsx语法可能和js的关键字class重复，所以DOM组件这里叫做className，显示还是class
-  // 1.2 用对象字面量imgStyleObj来设置style更加清晰
-  // 1.3 设置imgData能把所有的属性给提取出来
+  // 2 React组件的Props 自定义处理组件处理
 
-  const imgStyleObj = {
-          width: 100, // 默认px，加单位要写 '100wh'
-          height: 100,
-          backgroudColor: 'grey',
-        }
-  
-  // alt不能提出来
-  const imgData = {
-      className: "small",
-      style: {
-          width: 100, // 默认px，加单位要写 '100wh'
-          height: 100,
-          backgroudColor: 'grey',
-        }
+  // 需求1：希望对组件的一些内容进行定制
+  // Step1 请求功能所需的数据，比如文章的信息
+  // Step2 创建Article 组件 并将文章数据分别传递给 Article
+
+  // 需求2：在React组件用展开操作
+  // 实际会有更多复杂的属性，需要将标题和内容区域做一个封装
+
+  // 实际对于细节属性可能在接口返回的时候就会做一个包裹
+  const articleData = {
+    title: '标题1', 
+    detailData: {
+        content: "内容1",
+        active: true
+    }
   }
 
   return (
-    <div> 
-      <img 
-        src={logo} 
-        alt=""
-        // style={imgStyleObj}
-
-        // 并不是ES6的展开运算符，是当前对象的键值直接放到这个位置，不能在没有容器的地方单独使用
-        {...imgData}
+    <>
+      {/* <Article
+        title="标签1"
+        content="内容1" 
+        active         // 特别像DOM中的selected 或者autoplay 属性，不需要给值，默认是true
       />
-    </div>
+      <Article
+        title="标签2"
+        content="内容2" 
+        active
+      />
+      <Article
+        title="标签3"
+        content="内容3" 
+        active
+      /> */}
+
+      <Article
+        {...articleData}
+      />
+    </>
   );
 }
-
-export default App;
