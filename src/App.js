@@ -1,31 +1,20 @@
-import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
-
-// 使用 forwardRef 包装子组件
-const Child = forwardRef((props, ref) => {
-  useImperativeHandle(ref, () => ({
-    // 这里暴露子组件的方法或值
-    sayHello: () => {
-      alert('Hello from Child component!');
-    }
-  }));
-
-  return <div>child</div>;
-});
-
+import {useEffect, useState} from 'react'
 export default function App() {
-  const childRef = useRef();
-  
-  function handleClick() {
-    // 现在可以调用子组件暴露的方法
-    if (childRef.current) {
-      childRef.current.sayHello();
-    }
-  }
+  const [count, setCount] = useState(0)
+  const handleIncrement = () => setCount(count + 1)
+  const handleDecrement = () => setCount(count - 1)
+
+  // 可以在这里进行一些副作用操作，比如数据获取、订阅等
+  // 如果为空，就是任何操作都不会让它重复执行
+  useEffect(() => {
+    console.log('useEffect')
+  }, [count]) // 依赖项是 count，只有当 count 变化时才会重新执行
 
   return (
-    <div>
-      <Child ref={childRef} />
-      <button onClick={handleClick}>click</button>
+    <div style={{ padding: 20 }}>
+      <button onClick={handleDecrement}>-</button>
+      <span style={{ margin: '0 10px' }}>{count}</span>
+      <button onClick={handleIncrement}>+</button>
     </div>
-  );
+  )
 }
