@@ -1,20 +1,37 @@
-import {useEffect, useState} from 'react'
-export default function App() {
-  const [count, setCount] = useState(0)
-  const handleIncrement = () => setCount(count + 1)
-  const handleDecrement = () => setCount(count - 1)
+import { useMemo, useState,} from 'react';
 
-  // 可以在这里进行一些副作用操作，比如数据获取、订阅等
-  // 如果为空，就是任何操作都不会让它重复执行
-  useEffect(() => {
-    console.log('useEffect')
-  }, [count]) // 依赖项是 count，只有当 count 变化时才会重新执行
+function DoSomeMath({value}) {
+  const result = useMemo(() => {
+    console.log("子组件计算");
+    let result = 0;
+    for (let i = 0; i < 1e3; i++) {
+      result += value * 2;
+    }
+    return result;
+  }, [value]);
 
   return (
-    <div style={{ padding: 20 }}>
-      <button onClick={handleDecrement}>-</button>
-      <span style={{ margin: '0 10px' }}>{count}</span>
-      <button onClick={handleIncrement}>+</button>
+    <div>
+      <p> 输入内容： {value}</p>
+      <p> 经过复杂计算的数据： {result}</p>
     </div>
   )
 }
+
+function App() {
+  const [inputValue, setInputValue] = useState(5);
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>count的值为：{count}</p>
+      <button onClick={() => setCount(count + 1)}>点击更新</button>
+      <br />
+      <br />
+      <input type="number" value={inputValue} onChange={(e) => setInputValue(Number(e.target.value))} />
+      <DoSomeMath value={inputValue} />
+    </div>
+  );
+}
+
+export default App;
