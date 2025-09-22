@@ -520,3 +520,52 @@ function handleActive (status) {
 
 ## 同级组件传值
 需要通过父组件的中转，此时用props就很麻烦，可以使用context
+
+# Hooks
+这边有个计数器，但是不好做状态管理
+```
+import {useState} from 'react'
+export default function App() {
+  const [count, setCount] = useState(0)
+  const handleIncrement = () => setCount(count + 1)
+  const handleDecrement = () => setCount(count - 1)
+
+  return (
+    <div style={{ padding: 20 }}>
+      <button onClick={handleDecrement}>-</button>
+      <span style={{ margin: '0 10px' }}>{count}</span>
+      <button onClick={handleIncrement}>+</button>
+    </div>
+  )
+}
+```
+可以使用useReducer
+```
+import {useReducer, useState} from 'react'
+
+// 便于管理一个对象的多种状态的复杂操作
+function countReducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return state + 1
+    case 'decrement':
+      return state - 1
+    default:
+      throw new Error()
+  }
+}
+
+export default function App() {
+  const [state, dispatch] = useReducer(countReducer, 0) 
+  const handleIncrement = () => dispatch({ type: 'increment' })
+  const handleDecrement = () => dispatch({ type: 'decrement' })
+
+  return (
+    <div style={{ padding: 20 }}>
+      <button onClick={handleDecrement}>-</button>
+      <span style={{ margin: '0 10px' }}>{state}</span>
+      <button onClick={handleIncrement}>+</button>
+    </div>
+  )
+}
+```

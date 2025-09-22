@@ -1,40 +1,27 @@
-import {useState} from 'react'
+import {useReducer, useState} from 'react'
 
-
-// 这里onActive是接收到一个函数
-function Detail ({ onActive }) {
-  const [status, setStatus] = useState(false)
-  function handleClick () {
-      setStatus(!status)
-      // 只要点击按钮，就调用函数传递新值，
-      onActive(status)  
+// 便于管理一个对象的多种状态的复杂操作
+function countReducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return state + 1
+    case 'decrement':
+      return state - 1
+    default:
+      throw new Error()
   }
-
-  return (
-    <div> 
-      <button onClick={handleClick}> 按钮</button>
-
-      <p style={{
-        display: status ? 'block' : 'none'
-      }}>Detail的内容</p>
-    </div>
-  )
 }
 
 export default function App() {
-  // 组件通信
-  // 5 将同级组件传值
-  // 同级组件传递需要通过父组件的中转，此时用props就很麻烦，React提供了Hooks
-
-function handleActive (status) {
-  console.log('父组件收到', status)
-}
+  const [state, dispatch] = useReducer(countReducer, 0) 
+  const handleIncrement = () => dispatch({ type: 'increment' })
+  const handleDecrement = () => dispatch({ type: 'decrement' })
 
   return (
-    <>
-      <Detail 
-        onActive={handleActive}
-      />
-    </>
-  );
+    <div style={{ padding: 20 }}>
+      <button onClick={handleDecrement}>-</button>
+      <span style={{ margin: '0 10px' }}>{state}</span>
+      <button onClick={handleIncrement}>+</button>
+    </div>
+  )
 }
