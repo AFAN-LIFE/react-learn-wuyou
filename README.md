@@ -522,6 +522,7 @@ function handleActive (status) {
 需要通过父组件的中转，此时用props就很麻烦，可以使用context
 
 # Hooks
+## useReducer
 这边有个计数器，但是不好做状态管理
 ```
 import {useState} from 'react'
@@ -569,3 +570,49 @@ export default function App() {
   )
 }
 ```
+## useRef
+### 状态记录
+用uesRef记住上次的状态
+```
+import {useRef, useState} from 'react'
+
+export default function App() {
+  const [count, setCount] = useState(0)
+  // 不是响应式状态，不会随着组件更新而更新
+  const prevCount = useRef()
+
+  function handleClick() {
+    prevCount.current = count
+    setCount(count + 1)
+  }
+
+  return (
+    <div>
+      <h1>最新的Count: {count}</h1>
+      <p>上一次的Count: {prevCount.current}</p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  )
+}
+```
+### 组件引用
+可以获取组件焦点
+```
+import {useRef, useState} from 'react'
+
+export default function App() {
+  const inputRef = useRef(null)
+  function handleClick() {
+    // 点击获取焦点 .current能获取到input的dom对象
+    inputRef.current.focus()
+  }
+
+  return (
+    <div>
+      <input type="text" ref={inputRef} />
+      <button onClick={handleClick}>click</button>
+    </div>
+  )
+}
+```
+
