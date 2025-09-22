@@ -1,20 +1,31 @@
-import {useRef, useState} from 'react'
+import { useRef, useState, forwardRef, useImperativeHandle } from 'react';
+
+// 使用 forwardRef 包装子组件
+const Child = forwardRef((props, ref) => {
+  useImperativeHandle(ref, () => ({
+    // 这里暴露子组件的方法或值
+    sayHello: () => {
+      alert('Hello from Child component!');
+    }
+  }));
+
+  return <div>child</div>;
+});
 
 export default function App() {
-  const inputRef = useRef(null)
-  // 不是响应式状态，不会随着组件更新而更新
-  const prevCount = useRef()
-
+  const childRef = useRef();
+  
   function handleClick() {
-    // 点击获取焦点 .current能获取到input的dom对象
-    inputRef.current.focus()
+    // 现在可以调用子组件暴露的方法
+    if (childRef.current) {
+      childRef.current.sayHello();
+    }
   }
 
   return (
     <div>
-      <input type="text" ref={inputRef} />
+      <Child ref={childRef} />
       <button onClick={handleClick}>click</button>
     </div>
-  )
+  );
 }
-
